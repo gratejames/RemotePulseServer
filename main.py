@@ -12,7 +12,9 @@ app = Flask(__name__)
 # CORS(app, resources={r"/*": {"origins": ["http://localhost:3546"]}})
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+
 systemHistoryFile = "system.history.json"
+maxHistoryFileEntries = 1000
 
 @app.route("/")
 def hello_world():
@@ -52,8 +54,8 @@ class sysDetails:
 
             systemHistory["History"].append({"time":str(datetime.datetime.now()), "system":self.system})
 
-            if len(systemHistory["History"]) > 500:
-                systemHistory["History"] = systemHistory["History"][-500:]
+            if len(systemHistory["History"]) > maxHistoryFileEntries:
+                systemHistory["History"] = systemHistory["History"][-maxHistoryFileEntries:]
             with open(systemHistoryFile, 'w') as f:
                 json.dump(systemHistory, f)
 
