@@ -37,8 +37,10 @@ def disksUsage():
 		mtpt = part.mountpoint
 		if mtpt == "/boot/efi":
 			continue
-		usage = psutil.disk_usage(mtpt)
 		disk = part.device.split("/")[-1]
+		if "loop" in disk:
+			continue
+		usage = psutil.disk_usage(mtpt)
 		disksUsages[disk]["mountpoint"] = mtpt
 		disksUsages[disk]["free"] = usage.free
 		disksUsages[disk]["total"] = usage.total
