@@ -12,6 +12,8 @@ def memUsage():
 	memUsages = psutil.virtual_memory()
 	return {"available": memUsages.available, "total": memUsages.total, "usage": memUsages.percent}
 
+blacklistDisks = ["/boot/firmware", "/boot/efi"]
+
 def disksUsage():
 	interval = 4
 	before = psutil.disk_io_counters(perdisk=True)
@@ -35,7 +37,7 @@ def disksUsage():
 	parts = psutil.disk_partitions()
 	for part in parts:
 		mtpt = part.mountpoint
-		if mtpt == "/boot/efi":
+		if mtpt in blacklistDisks:
 			continue
 		disk = part.device.split("/")[-1]
 		if "loop" in disk:
